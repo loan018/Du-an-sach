@@ -1,0 +1,638 @@
+{
+  "info": {
+    "name": "Bookstore API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Đăng ký",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "http://localhost:3000/api/users/register", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "users", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"User Test\",\n  \"email\": \"user@test.com\",\n  \"password\": \"123456\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Đăng nhập",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "http://localhost:3000/api/users/login", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "users", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@test.com\",\n  \"password\": \"123456\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Xem thông tin chính mình",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "http://localhost:3000/api/users/me", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "users", "me"] }
+          }
+        },
+        {
+          "name": "Cập nhật thông tin cá nhân",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:3000/api/users/me", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "users", "me"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated User\",\n  \"email\": \"updated@test.com\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Xem danh sách người dùng",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "http://localhost:3000/api/users", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "users"] }
+          }
+        },
+        {
+          "name": "Cập nhật vai trò người dùng",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:3000/api/users/{{id}}/role", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "users", "{{id}}", "role"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"staff\"\n}"
+            }
+          }
+        },
+     {
+  "name": "Ẩn người dùng",
+  "request": {
+    "method": "PATCH",
+    "header": [
+      {
+        "key": "Authorization",
+        "value": "Bearer {{token}}"
+      }
+    ],
+    "url": {
+      "raw": "http://localhost:3000/api/users/hide/{{id}}",
+      "protocol": "http",
+      "host": ["localhost"],
+      "port": "3000",
+      "path": ["api", "users", "hide", "{{id}}"]
+    }
+  }
+}
+
+      ]
+    },
+    {
+      "name": "Banner",
+      "item": [
+        {
+          "name": "Tạo banner",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:3000/api/banner", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "banner"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Summer Sale\",\n  \"image\": \"https://example.com/banner.jpg\",\n  \"link\": \"https://ease.vn\",\n  \"startDate\": \"2025-06-20\",\n  \"endDate\": \"2025-07-01\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Lấy danh sách banner",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:3000/api/banner", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "banner"] }
+          }
+        },
+        {
+          "name": "Lấy banner theo ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:3000/api/banner/{{id}}", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "banner", "{{id}}"] }
+          }
+        },
+        {
+          "name": "Cập nhật banner",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:3000/api/banner/{{id}}", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "banner", "{{id}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Banner\",\n  \"link\": \"https://ease.vn/sale\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Xoá banner",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "http://localhost:3000/api/banner/{{id}}", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "banner", "{{id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Category",
+      "item": [
+        {
+          "name": "Tạo danh mục",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:3000/api/category", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "category"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sách Kinh Tế\",\n  \"description\": \"Sách về kinh doanh và quản lý\",\n  \"sortOrder\": 1,\n  \"isActive\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Lấy danh sách danh mục",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:3000/api/category", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "category"] }
+          }
+        },
+        {
+          "name": "Lấy danh mục theo ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "http://localhost:3000/api/category/{{id}}", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "category", "{{id}}"] }
+          }
+        },
+        {
+          "name": "Cập nhật danh mục",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:3000/api/category/{{id}}", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "category", "{{id}}"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sách Văn Học\",\n  \"description\": \"Văn học hiện đại\",\n  \"sortOrder\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "Ẩn danh mục",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "http://localhost:3000/api/category/hide/{{id}}", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "category", "hide", "{{id}}"] }
+          }
+        },
+        {
+          "name": "Xoá danh mục",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "http://localhost:3000/api/category/{{id}}", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["api", "category", "{{id}}"] }
+          }
+        }
+      ]
+    },
+    {
+  "name": "Book",
+  "item": [
+    {
+      "name": "Tạo sách",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/book",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "book"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Tư Duy Nhanh và Chậm\",\n  \"image\": \"https://example.com/image.jpg\",\n  \"price\": 150000,\n  \"category\": \"{{categoryId}}\",\n  \"author\": \"Daniel Kahneman\",\n  \"description\": \"Cuốn sách kinh điển về tâm lý học\",\n  \"quantity\": 100\n}"
+        }
+      }
+    },
+    {
+      "name": "Lấy danh sách sách",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/book",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "book"]
+        }
+      }
+    },
+    {
+      "name": "Lấy sách theo ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/book/{{id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "book", "{{id}}"]
+        }
+      }
+    },
+    {
+      "name": "Cập nhật sách",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/book/{{id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "book", "{{id}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Tư Duy Lại Tất Cả\",\n  \"price\": 170000,\n  \"quantity\": 50\n}"
+        }
+      }
+    },
+    {
+      "name": "Ẩn sách",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/book/hide/{{id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "book", "hide", "{{id}}"]
+        }
+      }
+    },
+    {
+      "name": "Xoá sách",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/book/{{id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "book", "{{id}}"]
+        }
+      }
+    }
+  ]
+},
+{
+  "name": "Cart",
+  "item": [
+    {
+      "name": "Lấy giỏ hàng",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/cart",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "cart"]
+        }
+      }
+    },
+    {
+      "name": "Thêm sách vào giỏ hàng",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/cart",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "cart"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"bookId\": \"{{bookId}}\",\n  \"quantity\": 2\n}"
+        }
+      }
+    },
+    {
+      "name": "Cập nhật số lượng sách",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/cart",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "cart"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"bookId\": \"{{bookId}}\",\n  \"quantity\": 5\n}"
+        }
+      }
+    },
+    {
+      "name": "Xoá sách khỏi giỏ hàng",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/cart/{{id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "cart", "{{id}}"]
+        }
+      }
+    },
+    {
+      "name": "Xoá toàn bộ giỏ hàng",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/cart/clear/all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "cart", "clear", "all"]
+        }
+      }
+    }
+  ]
+},
+{
+  "name": "Order",
+  "item": [
+    {
+      "name": "Tạo đơn hàng",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/order",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "order"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"shippingInfo\": {\n    \"name\": \"Nguyễn Văn A\",\n    \"address\": \"123 Đường ABC, Hà Nội\"\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Lấy đơn hàng của tôi",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/order/me",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "order", "me"]
+        }
+      }
+    },
+    {
+      "name": "Admin - Lấy toàn bộ đơn hàng",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/order/admin",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "order", "admin"]
+        }
+      }
+    },
+    {
+      "name": "Admin - Cập nhật trạng thái đơn",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/order/update-status/{{id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "order", "update-status", "{{id}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"confirming\"\n}"
+        }
+      }
+    }
+  ]
+},{
+  "name": "Review",
+  "item": [
+    {
+      "name": "Tạo đánh giá",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/review",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "review"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"bookId\": \"{{bookId}}\",\n  \"rating\": 5,\n  \"comment\": \"Sách hay, nên đọc!\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Lấy đánh giá theo sách",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/review/book/{{id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "review", "book", "{{id}}"]
+        }
+      }
+    },
+    {
+      "name": "Ẩn đánh giá",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/review/hide/{{id}}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "review", "hide", "{{id}}"]
+        }
+      }
+    }
+  ]
+},
+{
+  "name": "Stats",
+  "item": [
+    {
+      "name": "Tổng doanh thu (Total Revenue)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/stats/revenue/total",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "stats", "revenue", "total"]
+        }
+      }
+    },
+    {
+      "name": "Doanh thu theo tuần (Weekly Revenue)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/stats/revenue/weekly",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "stats", "revenue", "weekly"]
+        }
+      }
+    },
+    {
+      "name": "Thống kê đơn hàng theo trạng thái",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{staffOrAdminToken}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/stats/order/stats",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "stats", "order", "stats"]
+        }
+      }
+    },
+    {
+      "name": "Top 5 sách bán chạy",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{staffOrAdminToken}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/api/stats/books/top",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["api", "stats", "books", "top"]
+        }
+      }
+    }
+  ]
+}
+  ],
+  "variable": [
+    { "key": "token", "value": "your_jwt_token_here" },
+    { "key": "id", "value": " " }
+  ]
+}
