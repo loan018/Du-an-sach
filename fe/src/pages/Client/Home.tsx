@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAllBanners } from "../../services/bannerService";
 import { getAllBooks } from "../../services/bookService";
 import { getAllCategories } from "../../services/categoryService";
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
     try {
       const bannerData = await getAllBanners();
       console.log(bannerData);
-      
+
       setBanners(bannerData.filter((b) => b.isActive));
 
       const bookData = await getAllBooks({ page: 1, limit: 15 });
@@ -39,10 +39,7 @@ const Home: React.FC = () => {
 
   const isFavorite = (id: string) => favorites.includes(id);
 
-  const handleToggleFavorite = async (
-    e: React.MouseEvent,
-    bookId: string
-  ) => {
+  const handleToggleFavorite = async (e: React.MouseEvent, bookId: string) => {
     e.stopPropagation();
     if (isFavorite(bookId)) {
       await removeFromFavorites(bookId);
@@ -56,7 +53,7 @@ const Home: React.FC = () => {
       {/* Banner */}
       <section className="relative w-full h-[450px] overflow-hidden rounded-b-3xl shadow">
         {banners.length > 0 ? (
-          <>
+          <Link to="book?category=thieu-nhi">
             <img
               src={banners[0].image}
               alt={banners[0].title}
@@ -64,13 +61,13 @@ const Home: React.FC = () => {
             />
             <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-white text-center px-4">
               <h2 className="text-4xl md:text-5xl font-bold drop-shadow mb-2">
-                Khám phá Bộ Sưu Tập Mới
+                Khám phá Bộ Sưu Tập
               </h2>
               <p className="text-lg md:text-xl text-gray-200">
-                Thời trang hiện đại - Giá hợp lý
+                Đọc sách - Giá hợp lý
               </p>
             </div>
-          </>
+          </Link>
         ) : (
           <div className="bg-gradient-to-r from-pink-600 to-rose-500 text-white flex items-center justify-center h-full">
             <h2 className="text-3xl font-semibold">Banner đang cập nhật...</h2>
