@@ -30,6 +30,11 @@ const categorySchema = new mongoose.Schema(
       default: 0,
       min: [0, "Thứ tự không được nhỏ hơn 0"],
     },
+    image: {
+      type: String,
+      trim: true,
+      default: "", 
+    },
   },
   {
     timestamps: true,
@@ -37,7 +42,7 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-// Auto generate slug trước khi lưu
+// Tạo slug tự động từ name
 categorySchema.pre("save", function (next) {
   if (this.isModified("name")) {
     this.slug = slugify(this.name, { lower: true, strict: true });

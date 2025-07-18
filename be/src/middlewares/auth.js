@@ -39,22 +39,9 @@ export const isStaff = (req, res, next) => {
   }
   next();
 };
-export const canDeleteUser = async (req, res, next) => {
-  try {
-    const userToDelete = await User.findById(req.params.id);
-    if (!userToDelete) {
-      return res.status(404).json({ success: false, message: "Người dùng không tồn tại" });
-    }
-
-    const currentRole = req.user.role;
-    const targetRole = userToDelete.role;
-
-    if (currentRole === "admin" || (currentRole === "staff" && targetRole === "user")) {
-      return next(); 
-    }
-
-    return res.status(403).json({ success: false, message: "Bạn không có quyền xoá người dùng này" });
-  } catch (err) {
-    return res.status(500).json({ success: false, message: "Lỗi máy chủ: " + err.message });
+export const canDeleteUser = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ success: false, message: "Bạn không có quyền ẩn người dùng" });
   }
+  next();
 };

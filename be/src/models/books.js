@@ -14,6 +14,11 @@ const bookSchema = new mongoose.Schema(
       required: [true, "Ảnh sách là bắt buộc"],
       match: [/^https?:\/\/.+/, "Ảnh phải là một đường dẫn hợp lệ (URL)"],
     },
+    oldPrice: {
+      type: Number,
+      default: 0,
+      min: [1000, "Giá cũ phải lớn hơn 1000"],
+    },
     price: {
       type: Number,
       required: [true, "Giá là bắt buộc"],
@@ -34,17 +39,22 @@ const bookSchema = new mongoose.Schema(
     description: {
       type: String,
       default: "",
-      maxlength: [1000, "Mô tả sách không được vượt quá 1000 ký tự"],
+      maxlength: [1500, "Mô tả sách không được vượt quá 1500 ký tự"],
     },
     quantity: {
       type: Number,
       required: [true, "Số lượng là bắt buộc"],
       min: [0, "Số lượng không được âm"],
     },
+    sold: {
+      type: Number,
+      default: 0,
+      min: [0, "Số lượng đã bán không được âm"],
+    },
     isActive: {
       type: Boolean,
       default: true,
-    }
+    },
   },
   { timestamps: true }
 );

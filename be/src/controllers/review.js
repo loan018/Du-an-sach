@@ -2,6 +2,65 @@ import Review from "../models/review.js";
 import Book from "../models/books.js";
 import Order from "../models/order.js"; 
 
+export const getReviewsBook = async (req, res) => {
+  try {
+    const {
+      id, 
+      search = "",
+      page = 1,
+      limit = 10,
+      rating,
+    } = req.query;
+
+    const query = {
+      isActive: true,
+    };
+
+    if (id && id !== "all") {
+      query.book = id; 
+    }
+    const allReviews = await Review.find(query)
+      .populate("user", "name")
+      .populate("book", "title")
+      .sort({ createdAt: -1 });
+    const filteredReviews = allReviews.filter((review) =>
+      review.user?.name?.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const ratedReviews =
+      rating && rating !== "all"
+        ? filteredReviews.filter((r) => r.rating === Number(rating))
+        : filteredReviews;
+
+    const currentPage = parseInt(page, 10) || 1;
+    const perPage = parseInt(limit, 10) || 10;
+    const start = (currentPage - 1) * perPage;
+    const end = start + perPage;
+
+    const paginatedReviews = ratedReviews.slice(start, end);
+
+    res.json({
+      success: true,
+      message: "Lấy danh sách đánh giá bình luận thành công",
+      data: paginatedReviews,
+      pagination: {
+        totalItems: ratedReviews.length,
+        totalPages: Math.ceil(ratedReviews.length / perPage),
+        currentPage,
+        perPage,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Không lấy được đánh giá bình luận",
+      error: err.message,
+    });
+  }
+};
+
+
+
 //Hàm tính lại rating trung bình và số đánh giá của sách
 const updateBookRating = async (bookId) => {
   const reviews = await Review.find({ book: bookId, isActive: true });

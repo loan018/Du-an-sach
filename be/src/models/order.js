@@ -7,28 +7,34 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "Người dùng là bắt buộc"],
     },
-   shippingInfo: {
-  name: {
-    type: String,
-    required: [true, "Tên người nhận là bắt buộc"],
-    trim: true,
-    minlength: [2, "Tên quá ngắn"],
-    maxlength: [100, "Tên quá dài"],
-  },
-  address: {
-    type: String,
-    required: [true, "Địa chỉ là bắt buộc"],
-    trim: true,
-    minlength: [5, "Địa chỉ quá ngắn"],
-    maxlength: [200, "Địa chỉ quá dài"],
-  },
-  phone: {
-    type: String,
-    required: [true, "Số điện thoại là bắt buộc"],
-    trim: true,
-    match: [/^(0|\+84)[0-9]{9}$/, "Số điện thoại không hợp lệ"],
-  },
-},
+    orderCode: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+    shippingInfo: {
+      name: {
+        type: String,
+        required: [true, "Tên người nhận là bắt buộc"],
+        trim: true,
+        minlength: [2, "Tên quá ngắn"],
+        maxlength: [100, "Tên quá dài"],
+      },
+      address: {
+        type: String,
+        required: [true, "Địa chỉ là bắt buộc"],
+        trim: true,
+        minlength: [5, "Địa chỉ quá ngắn"],
+        maxlength: [200, "Địa chỉ quá dài"],
+      },
+      phone: {
+        type: String,
+        required: [true, "Số điện thoại là bắt buộc"],
+        trim: true,
+        match: [/^(0|\+84)[0-9]{9}$/, "Số điện thoại không hợp lệ"],
+      },
+    },
     items: [
       {
         book: {
@@ -56,7 +62,7 @@ const orderSchema = new mongoose.Schema(
     paymentMethod: {
       type: String,
       enum: {
-        values: ["cod", "momo"],
+        values: ["cod", "vnpay"],
         message: "Phương thức thanh toán không hợp lệ",
       },
       default: "cod",
@@ -76,8 +82,13 @@ const orderSchema = new mongoose.Schema(
       },
       default: "pending",
     },
+    deliveredAt: {
+      type: Date,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export default mongoose.model("Order", orderSchema);

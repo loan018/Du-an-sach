@@ -91,30 +91,37 @@ export const updateCartItem = async (req, res) => {
 // Xóa 1 sản phẩm khỏi giỏ
 export const removeCartItem = async (req, res) => {
   try {
+    const bookId = req.params.id;
+
     const cart = await Cart.findOne({ user: req.user.id });
     if (!cart) {
       return res.status(404).json({ success: false, message: "Không tìm thấy giỏ hàng" });
     }
 
-    const beforeLength = cart.items.length;
-
-    cart.items = cart.items.filter((item) => {
-      const bookId = item.book.id ? item.book.id.toString() : item.book.toString();
-      return bookId !== req.params.bookId;
-    });
-
-    if (cart.items.length === beforeLength) {
+    const item = cart.items.find((item) => item.book.toString() === bookId);
+    if (!item) {
       return res.status(404).json({ success: false, message: "Không tìm thấy sách trong giỏ hàng" });
     }
 
+    cart.items = cart.items.filter((item) => item.book.toString() !== bookId);
     await cart.save();
 
     const updated = await Cart.findById(cart.id).populate("items.book");
-    res.json({ success: true, message: "Xoá sách thành công", data: updated });
+
+    res.json({
+      success: true,
+      message: "Xoá sách thành công",
+      data: updated,
+    });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Xoá sách thất bại", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Xoá sách thất bại",
+      error: err.message,
+    });
   }
 };
+
 
 
 // 🧹 Xóa toàn bộ giỏ hàng

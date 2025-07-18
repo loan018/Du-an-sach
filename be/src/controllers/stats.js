@@ -1,18 +1,28 @@
 import Order from "../models/order.js";
 import Book from "../models/books.js";
 
-// Tổng doanh thu 
+// Tổng doanh thu
 export const getTotalRevenue = async (req, res) => {
   try {
+    const { year } = req.query; 
+
+    const matchStage = {
+      $match: {
+        $or: [
+          { paymentMethod: "online", isPaid: true },
+          { paymentMethod: "cod", status: "delivered" }
+        ]
+      }
+    };
+
+    if (year) {
+      const start = new Date(`${year}-01-01`);
+      const end = new Date(`${+year + 1}-01-01`);
+      matchStage.$match.createdAt = { $gte: start, $lt: end };
+    }
+
     const total = await Order.aggregate([
-      {
-        $match: {
-          $or: [
-            { paymentMethod: "online", isPaid: true },
-            { paymentMethod: "cod", status: "delivered" }
-          ]
-        }
-      },
+      matchStage,
       {
         $group: {
           _id: null,
@@ -23,7 +33,7 @@ export const getTotalRevenue = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Thống kê doanh thu thành công",
+      message: `Thống kê doanh thu ${year ? `năm ${year}` : "tổng"} thành công`,
       totalRevenue: total[0]?.totalRevenue || 0
     });
   } catch (err) {
@@ -35,60 +45,68 @@ export const getTotalRevenue = async (req, res) => {
   }
 };
 
-//  Doanh thu theo tuần
-export const getWeeklyRevenue = async (req, res) => {
+
+// Doanh thu theo tháng trong năm hiện tại
+export const getMonthlyRevenue = async (req, res) => {
   try {
-    const result = await Order.aggregate([
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1); // Ngày 1 tháng 1 năm nay
+
+    const rawData = await Order.aggregate([
       {
         $match: {
+          createdAt: { $gte: startOfYear },
           $or: [
-            { status: "delivered" },
-            { isPaid: true }
+            { paymentMethod: "online", isPaid: true },
+            { paymentMethod: "cod", status: "delivered" }
           ]
         }
       },
       {
         $group: {
-          _id: { $isoDayOfWeek: "$createdAt" }, 
+          _id: { $month: "$createdAt" }, // Nhóm theo tháng (1-12)
           totalRevenue: { $sum: "$totalAmount" },
           orderCount: { $sum: 1 }
         }
       },
-      { $sort: { _id: 1 } }, // Sắp xếp theo thứ trong tuần
-      {
-        $project: {
-          _id: 0,
-          day: {
-            $arrayElemAt: [
-              [
-                "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm",
-                "Thứ Sáu", "Thứ Bảy", "Chủ Nhật"
-              ],
-              { $subtract: [ "$_id", 1 ] }
-            ]
-          },
-          totalRevenue: 1,
-          orderCount: 1
-        }
-      }
+      { $sort: { _id: 1 } }
     ]);
+
+    const months = [
+      "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4",
+      "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8",
+      "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+    ];
+
+    const dataMap = rawData.reduce((acc, item) => {
+      acc[item._id] = item;
+      return acc;
+    }, {});
+
+    const fullData = months.map((month, index) => {
+      const data = dataMap[index + 1]; // MongoDB tháng bắt đầu từ 1
+      return {
+        month,
+        totalRevenue: data?.totalRevenue || 0,
+        orderCount: data?.orderCount || 0
+      };
+    });
 
     res.json({
       success: true,
-      message: "Thống kê theo thứ trong tuần thành công",
-      data: result
+      message: "Thống kê doanh thu theo tháng thành công",
+      data: fullData
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
-      message: "Không thể lấy thống kê theo thứ",
+      message: "Không thể lấy thống kê theo tháng",
       error: err.message
     });
   }
 };
 
-//Thống kê số lượng đơn hàng theo trạng thái
+// Thống kê số lượng đơn hàng theo trạng thái
 export const getOrderStats = async (req, res) => {
   try {
     const [tong, daHuy, choXuLy, choLayHang, dangGiao, daGiao] = await Promise.all([
@@ -150,8 +168,17 @@ export const getTopBooks = async (req, res) => {
         }
       }
     ]);
-    res.json({ success: true,message: "Thống kê sách bán chạy thành công", data: topBooks });
+
+    res.json({
+      success: true,
+      message: "Thống kê sách bán chạy thành công",
+      data: topBooks
+    });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Lỗi thống kê sách bán chạy", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Lỗi thống kê sách bán chạy",
+      error: err.message
+    });
   }
 };
